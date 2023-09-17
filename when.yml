@@ -1,0 +1,14 @@
+- name: when-play
+  hosts: webservers 
+  gather_facts: true
+  vars_files: ./variables.yml
+  tasks:
+    - name: installing nginx
+      apt:
+        name: nginx
+      when: ansible_facts[ 'distribution' ] == 'Ubuntu'
+   
+    - name: installing httpd
+      package:
+        name: httpd
+      when: ansible_facts['distribution'] == "CentOS"
