@@ -1,0 +1,29 @@
+- name: install package using handler
+  hosts: webservers
+  gather_facts : true
+  vars:
+    package_name : curl
+    files_list :
+      -index.html 
+      -file.js
+      -file.css
+  tasks:
+    - name: install package
+      package:
+         name : "{{ package_name}}"
+         state: present
+      notify : handler1
+  
+  handlers:
+    - name: handler1
+      service:
+        name: nginx
+        state : started
+      notify : handler2
+
+    - name: handler2
+      sysvinit:
+        name: nginx
+        state: restarted
+      
+
